@@ -3,10 +3,10 @@ import { useMemo } from "react";
 
 import { AudioControls } from "@/components/AudioControls";
 import { LyricsDisplay } from "@/components/LyricsDisplay";
+import lyricsData from "@/data/lyrics.json";
 import { useAudioPlayer } from "@/hooks/useAudioPlayer";
 import type { LyricWord } from "@/lib/lyrics";
 import { parseLyrics } from "@/lib/lyrics";
-import lyricsData from "../../public/song/lyrics.json";
 
 export const Route = createFileRoute("/")({
 	component: LyricsPlayer,
