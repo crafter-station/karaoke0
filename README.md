@@ -2,7 +2,9 @@
 
 A Spotify-like lyrics player that syncs audio with word-by-word highlighting. Built with TanStack Start, React 19, and Framer Motion.
 
-![Lyrics Player Screenshot](./screenshot.png)
+## Demo Song
+
+The included demo uses ["Stay Woke (Playwright Edition)"](https://suno.com/song/3f937066-957f-4572-b617-ffbae130e03d) - an AI-generated song about software testing created with [Suno](https://suno.com).
 
 ## Features
 
