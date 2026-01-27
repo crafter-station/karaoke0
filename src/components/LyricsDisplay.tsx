@@ -1,8 +1,22 @@
 import { motion } from "motion/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { LyricLine } from "@/lib/lyrics";
 import { getCurrentLineIndex, isWordActive } from "@/lib/lyrics";
 import { cn } from "@/lib/utils";
+
+function useIsMobile() {
+	const [isMobile, setIsMobile] = useState(false);
+
+	useEffect(() => {
+		const mq = window.matchMedia("(max-width: 639px)");
+		setIsMobile(mq.matches);
+		const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+		mq.addEventListener("change", handler);
+		return () => mq.removeEventListener("change", handler);
+	}, []);
+
+	return isMobile;
+}
 
 interface LyricsDisplayProps {
 	lines: LyricLine[];
@@ -19,6 +33,7 @@ export function LyricsDisplay({
 }: LyricsDisplayProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const currentLineIndex = getCurrentLineIndex(lines, currentTime);
+	const isMobile = useIsMobile();
 
 	// Auto-scroll to keep current line centered
 	useEffect(() => {
@@ -40,7 +55,7 @@ export function LyricsDisplay({
 		<div
 			ref={containerRef}
 			className={cn(
-				"flex flex-col items-center justify-center gap-3 sm:gap-4 overflow-hidden px-4",
+				"flex flex-col items-center justify-center gap-3 sm:gap-4 overflow-hidden px-2 sm:px-4",
 				className,
 			)}
 		>
@@ -67,6 +82,7 @@ export function LyricsDisplay({
 						isPast={isPast}
 						opacity={opacity}
 						hasLargeGap={hasLargeGap}
+						isMobile={isMobile}
 						onSeek={onSeek}
 					/>
 				);
@@ -82,6 +98,7 @@ interface LyricLineComponentProps {
 	isPast: boolean;
 	opacity: number;
 	hasLargeGap: boolean;
+	isMobile: boolean;
 	onSeek?: (time: number) => void;
 }
 
@@ -92,11 +109,12 @@ function LyricLineComponent({
 	isPast,
 	opacity,
 	hasLargeGap,
+	isMobile,
 	onSeek,
 }: LyricLineComponentProps) {
 	// Use scale instead of font-size changes to avoid layout reflow
 	// Smaller scale on mobile to prevent overflow
-	const scale = isCurrent ? 1.15 : 1;
+	const scale = isCurrent ? (isMobile ? 1.05 : 1.15) : 1;
 
 	return (
 		<motion.div
@@ -113,7 +131,7 @@ function LyricLineComponent({
 				layout: { type: "spring", stiffness: 300, damping: 30 },
 			}}
 			className={cn(
-				"text-center font-bold text-base sm:text-lg md:text-xl lg:text-2xl origin-center max-w-full px-2",
+				"text-center font-bold text-sm sm:text-base md:text-lg lg:text-xl origin-center max-w-full px-2 break-words",
 				hasLargeGap && "mt-4 sm:mt-8",
 			)}
 		>
