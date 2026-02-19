@@ -9,7 +9,7 @@ A Spotify-like lyrics player that syncs audio with word-by-word highlighting.
 - **Framework**: TanStack Start (React meta-framework built on TanStack Router)
 - **Language**: TypeScript (strict mode)
 - **Runtime**: Bun (preferred), Node.js compatible
-- **Package Manager**: pnpm
+- **Package Manager**: bun
 - **Build Tool**: Vite 7.x
 - **React Version**: 19.x with React Compiler
 - **Animations**: Framer Motion (`motion` package)
@@ -20,32 +20,32 @@ A Spotify-like lyrics player that syncs audio with word-by-word highlighting.
 ### Development
 
 ```bash
-pnpm dev          # Start dev server on port 3000
-pnpm build        # Build for production
-pnpm preview      # Preview production build
+bun dev          # Start dev server on port 3000
+bun build        # Build for production
+bun preview      # Preview production build
 ```
 
 ### Testing
 
 ```bash
-pnpm test                        # Run all tests (vitest run)
-pnpm vitest run <file>           # Run a single test file
-pnpm vitest run <file> -t "name" # Run a specific test by name
-pnpm vitest --watch              # Run tests in watch mode
+bun test                        # Run all tests (vitest run)
+bun vitest run <file>           # Run a single test file
+bun vitest run <file> -t "name" # Run a specific test by name
+bun vitest --watch              # Run tests in watch mode
 ```
 
 ### Linting & Formatting
 
 ```bash
-pnpm lint         # Run Biome linter
-pnpm format       # Run Biome formatter
-pnpm check        # Run all Biome checks (lint + format)
+bun lint         # Run Biome linter
+bun format       # Run Biome formatter
+bun check        # Run all Biome checks (lint + format)
 ```
 
 To auto-fix issues:
 
 ```bash
-pnpm biome check --write
+bun biome check --write
 ```
 
 ## Architecture
@@ -205,6 +205,6 @@ Breakpoints:
 
 1. **DO NOT EDIT** `src/routeTree.gen.ts` - it's auto-generated
 2. **DO NOT EDIT** `src/styles.css` directly for component styles - use Tailwind classes
-3. Run `pnpm check` before committing to catch lint/format issues
+3. Run `bun check` before committing to catch lint/format issues
 4. Use the `@/` path alias for all local imports
 5. The lyrics data structure must match `LyricWord` interface in `src/lib/lyrics.ts`

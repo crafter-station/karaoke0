@@ -1,5 +1,7 @@
 import { motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+
+import { useTheme } from "@/hooks/useTheme";
 import type { LyricLine } from "@/lib/lyrics";
 import { getCurrentLineIndex, isWordActive } from "@/lib/lyrics";
 import { cn } from "@/lib/utils";
@@ -34,6 +36,7 @@ export function LyricsDisplay({
 	const containerRef = useRef<HTMLDivElement>(null);
 	const currentLineIndex = getCurrentLineIndex(lines, currentTime);
 	const isMobile = useIsMobile();
+	const { isDark } = useTheme();
 
 	// Auto-scroll to keep current line centered
 	useEffect(() => {
@@ -83,6 +86,7 @@ export function LyricsDisplay({
 						opacity={opacity}
 						hasLargeGap={hasLargeGap}
 						isMobile={isMobile}
+						isDark={isDark}
 						onSeek={onSeek}
 					/>
 				);
@@ -99,6 +103,7 @@ interface LyricLineComponentProps {
 	opacity: number;
 	hasLargeGap: boolean;
 	isMobile: boolean;
+	isDark: boolean;
 	onSeek?: (time: number) => void;
 }
 
@@ -110,11 +115,22 @@ function LyricLineComponent({
 	opacity,
 	hasLargeGap,
 	isMobile,
+	isDark,
 	onSeek,
 }: LyricLineComponentProps) {
 	// Use scale instead of font-size changes to avoid layout reflow
 	// Smaller scale on mobile to prevent overflow
 	const scale = isCurrent ? (isMobile ? 1.05 : 1.15) : 1;
+
+	// Theme-aware highlight colors
+	const activeColor = isDark ? "#ffffff" : "#111827";
+	const inactiveColor = isDark ? "#71717a" : "#9CA3AF";
+	const glowOn = isDark
+		? "0 0 8px rgba(255,255,255,0.4)"
+		: "0 0 8px rgba(0,0,0,0.08)";
+	const glowOff = isDark
+		? "0 0 0px rgba(255,255,255,0)"
+		: "0 0 0px rgba(0,0,0,0)";
 
 	return (
 		<motion.div
@@ -131,7 +147,7 @@ function LyricLineComponent({
 				layout: { type: "spring", stiffness: 300, damping: 30 },
 			}}
 			className={cn(
-				"text-center font-bold text-sm sm:text-base md:text-lg lg:text-xl origin-center max-w-full px-2 break-words",
+				"text-center font-semibold font-sans text-sm sm:text-base md:text-lg lg:text-xl origin-center max-w-full px-2 break-words",
 				hasLargeGap && "mt-4 sm:mt-8",
 			)}
 		>
@@ -161,11 +177,8 @@ function LyricLineComponent({
 							}
 						}}
 						animate={{
-							color: shouldHighlight ? "#ffffff" : "#71717a",
-							textShadow:
-								isCurrent && isActive
-									? "0 0 8px rgba(255,255,255,0.4)"
-									: "0 0 0px rgba(255,255,255,0)",
+							color: shouldHighlight ? activeColor : inactiveColor,
+							textShadow: isCurrent && isActive ? glowOn : glowOff,
 						}}
 						transition={{ duration: 0.15, ease: "easeOut" }}
 						className="cursor-pointer hover:opacity-80"

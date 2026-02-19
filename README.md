@@ -85,7 +85,7 @@ Play button and progress slider with:
 ### Prerequisites
 
 - [Bun](https://bun.sh/) (recommended) or Node.js 20+
-- pnpm, npm, or yarn
+- bun, npm, or yarn
 
 ### Installation
 
@@ -95,10 +95,10 @@ git clone https://github.com/crafter-station/synced-lyrics-player.git
 cd synced-lyrics-player
 
 # Install dependencies
-pnpm install
+bun install
 
 # Start development server
-pnpm dev
+bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
@@ -153,11 +153,11 @@ public/
 ## Scripts
 
 ```bash
-pnpm dev       # Start dev server on port 3000
-pnpm build     # Build for production
-pnpm preview   # Preview production build
-pnpm check     # Run Biome lint + format checks
-pnpm test      # Run Vitest tests
+bun dev       # Start dev server on port 3000
+bun build     # Build for production
+bun preview   # Preview production build
+bun check     # Run Biome lint + format checks
+bun test      # Run Vitest tests
 ```
 
 ## License

@@ -40,7 +40,7 @@ export function AudioControls({
 				size="icon"
 				onClick={onToggle}
 				disabled={!isLoaded}
-				className="size-12 sm:size-16 rounded-full bg-white/10 hover:bg-white/20 text-white hover:text-white backdrop-blur-sm transition-all duration-200 hover:scale-105"
+				className="size-12 sm:size-16 rounded-full bg-secondary/80 text-secondary-foreground hover:bg-secondary hover:text-secondary-foreground backdrop-blur-sm transition-all duration-200 hover:scale-105 shadow-lg"
 			>
 				{isPlaying ? (
 					<Pause className="size-6 sm:size-8" fill="currentColor" />
@@ -54,7 +54,7 @@ export function AudioControls({
 
 			{/* Progress Bar */}
 			<div className="w-full flex items-center gap-3">
-				<span className="text-xs text-zinc-400 font-mono w-10 text-right">
+				<span className="text-xs text-muted-foreground font-mono w-10 text-right">
 					{formatTime(currentTime)}
 				</span>
 				<Slider
@@ -67,9 +67,9 @@ export function AudioControls({
 						}
 					}}
 					disabled={!isLoaded}
-					className="flex-1 [&_[data-slot=slider-track]]:bg-zinc-700 [&_[data-slot=slider-range]]:bg-white [&_[data-slot=slider-thumb]]:bg-white [&_[data-slot=slider-thumb]]:border-white [&_[data-slot=slider-thumb]]:size-3"
+					className="flex-1 [&_[data-slot=slider-track]]:bg-border [&_[data-slot=slider-range]]:bg-primary [&_[data-slot=slider-thumb]]:bg-primary [&_[data-slot=slider-thumb]]:border-primary [&_[data-slot=slider-thumb]]:size-3"
 				/>
-				<span className="text-xs text-zinc-400 font-mono w-10">
+				<span className="text-xs text-muted-foreground font-mono w-10">
 					{formatTime(duration)}
 				</span>
 			</div>
