@@ -117,6 +117,18 @@ function LandingPage() {
 					{error && (
 						<p className="mt-2 text-sm text-destructive text-center">{error}</p>
 					)}
+					<p className="mt-3 text-sm text-muted-foreground">
+						Don't have a song URL?{" "}
+						<a
+							href="https://suno.com"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="text-primary underline underline-offset-2 hover:text-primary/80 transition-colors"
+						>
+							Browse songs on Suno
+						</a>{" "}
+						and copy any song link to try it here.
+					</p>
 				</motion.form>
 			</section>
 
