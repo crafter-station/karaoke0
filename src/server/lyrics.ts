@@ -155,8 +155,23 @@ async function fetchMetadata(songId: string): Promise<SongMetadata> {
 			}
 		}
 
-		// Image URL pattern from Suno CDN
-		const imageUrl = `https://cdn2.suno.ai/image_${songId}.jpeg`;
+		// Parse og:image meta tag for accurate image CDN URL
+		const imageMatch = html.match(/<meta property="og:image" content="([^"]+)"/);
+		let imageUrl = imageMatch?.[1]
+			? decodeHtmlEntities(imageMatch[1])
+			: `https://cdn2.suno.ai/image_large_${songId}.jpeg`; // Fallback to large image
+
+		// Validate image url exists to prevent 403
+		try {
+			const imgCheck = await fetch(imageUrl, { method: "HEAD" });
+			if (!imgCheck.ok) {
+				const alternativePath = `https://cdn2.suno.ai/image_${songId}.jpeg`;
+				const altCheck = await fetch(alternativePath, { method: "HEAD" });
+				imageUrl = altCheck.ok ? alternativePath : "https://cdn1.suno.ai/defaultOrange.webp";
+			}
+		} catch (e) {
+			imageUrl = "https://cdn1.suno.ai/defaultOrange.webp";
+		}
 
 		return { title, artist, imageUrl };
 	} catch (error) {
@@ -165,7 +180,7 @@ async function fetchMetadata(songId: string): Promise<SongMetadata> {
 		return {
 			title: "Suno Song",
 			artist: "Unknown Artist",
-			imageUrl: `https://cdn2.suno.ai/image_${songId}.jpeg`,
+			imageUrl: `https://cdn2.suno.ai/image_large_${songId}.jpeg`,
 		};
 	}
 }

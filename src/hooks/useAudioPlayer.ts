@@ -12,12 +12,17 @@ export interface AudioPlayerControls {
 	pause: () => void;
 	toggle: () => void;
 	seek: (time: number) => void;
+	getAnalyser: () => AnalyserNode | null;
 }
 
 export function useAudioPlayer(
 	src: string,
 ): AudioPlayerState & AudioPlayerControls {
 	const audioRef = useRef<HTMLAudioElement | null>(null);
+	const audioContextRef = useRef<AudioContext | null>(null);
+	const sourceNodeRef = useRef<MediaElementAudioSourceNode | null>(null);
+	const analyserRef = useRef<AnalyserNode | null>(null);
+
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [currentTime, setCurrentTime] = useState(0);
 	const [duration, setDuration] = useState(0);
@@ -26,6 +31,7 @@ export function useAudioPlayer(
 	// Initialize audio element
 	useEffect(() => {
 		const audio = new Audio(src);
+		audio.crossOrigin = "anonymous";
 		audioRef.current = audio;
 
 		const handleLoadedMetadata = () => {
@@ -59,12 +65,39 @@ export function useAudioPlayer(
 			audio.removeEventListener("pause", handlePause);
 			audio.pause();
 			audioRef.current = null;
+
+			if (audioContextRef.current) {
+				audioContextRef.current.close();
+				audioContextRef.current = null;
+			}
 		};
 	}, [src]);
 
-	const play = useCallback(() => {
-		audioRef.current?.play();
+	const initAudioContext = useCallback(() => {
+		if (!audioRef.current || audioContextRef.current) return;
+
+		const AudioContextClass =
+			window.AudioContext || (window as any).webkitAudioContext;
+		const context = new AudioContextClass();
+		const analyser = context.createAnalyser();
+		analyser.fftSize = 256;
+
+		const source = context.createMediaElementSource(audioRef.current);
+		source.connect(analyser);
+		analyser.connect(context.destination);
+
+		audioContextRef.current = context;
+		analyserRef.current = analyser;
+		sourceNodeRef.current = source;
 	}, []);
+
+	const play = useCallback(() => {
+		if (audioContextRef.current?.state === "suspended") {
+			audioContextRef.current.resume();
+		}
+		initAudioContext();
+		audioRef.current?.play();
+	}, [initAudioContext]);
 
 	const pause = useCallback(() => {
 		audioRef.current?.pause();
@@ -72,17 +105,21 @@ export function useAudioPlayer(
 
 	const toggle = useCallback(() => {
 		if (audioRef.current?.paused) {
-			audioRef.current?.play();
+			play();
 		} else {
-			audioRef.current?.pause();
+			pause();
 		}
-	}, []);
+	}, [play, pause]);
 
 	const seek = useCallback((time: number) => {
 		if (audioRef.current) {
 			audioRef.current.currentTime = time;
 			setCurrentTime(time);
 		}
+	}, []);
+
+	const getAnalyser = useCallback(() => {
+		return analyserRef.current;
 	}, []);
 
 	return {
@@ -94,5 +131,6 @@ export function useAudioPlayer(
 		pause,
 		toggle,
 		seek,
+		getAnalyser,
 	};
 }
