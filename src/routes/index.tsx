@@ -9,6 +9,7 @@ const FEATURED_SONG_IDS = [
 	"6cdb57d5-4c36-429e-a89c-7e12dd764271",
 	"a440a785-5245-4e1d-91a8-abeb064430e8",
 	"3f937066-957f-4572-b617-ffbae130e03d",
+	"571f0fe4-d4da-4daa-ae34-8c99c5e68441",
 ];
 
 export const Route = createFileRoute("/")({

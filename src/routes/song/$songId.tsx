@@ -1,10 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ExternalLink, Home } from "lucide-react";
 import { useMemo } from "react";
-
-import { AnimatedBackground } from "@/components/AnimatedBackground";
 import { AudioControls } from "@/components/AudioControls";
 import { LyricsDisplay } from "@/components/LyricsDisplay";
+import PremiumFluidVisualizer from "@/components/PremiumFluidVisualizer";
 import { useAudioPlayer } from "@/hooks/useAudioPlayer";
 import { useImageColors } from "@/hooks/useImageColors";
 import type { LyricWord } from "@/lib/lyrics";
@@ -41,8 +40,12 @@ function SongPlayer() {
 
 	return (
 		<div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground overflow-hidden">
-			{/* Animated background gradient */}
-			<AnimatedBackground colors={colors} />
+			{/* Premium Fluid Visualizer */}
+			<PremiumFluidVisualizer
+				analyser={audio.getAnalyser()}
+				colors={colors}
+				isPlaying={audio.isPlaying}
+			/>
 
 			{/* Header with cover image and song info */}
 			<div className="fixed top-0 left-0 right-0 flex items-center justify-between h-14 px-4 sm:px-6 bg-background/60 backdrop-blur-xl border-b border-border/30 z-10">

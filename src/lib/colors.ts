@@ -40,8 +40,25 @@ export function getGradientColors(colors: ExtractedColors, isDark = true) {
 	const opacityScale = isDark ? 1 : 0.35;
 
 	return {
-		primary: rgbToRgba(colors.primary, 0.5 * opacityScale),
-		secondary: rgbToRgba(colors.secondary, 0.4 * opacityScale),
-		tertiary: rgbToRgba(tertiary, 0.3 * opacityScale),
+		primary: rgbToRgba(colors.primary, 0.8 * opacityScale),
+		secondary: rgbToRgba(colors.secondary, 0.7 * opacityScale),
+		tertiary: rgbToRgba(tertiary, 0.6 * opacityScale),
+	};
+}
+
+// Solid colors for canvas visualizer to ensure high visibility
+export function getVisualizerColors(colors: ExtractedColors, isDark = true) {
+	const tertiary: [number, number, number] = [
+		Math.round((colors.primary[0] + colors.secondary[0]) / 2),
+		Math.round((colors.primary[1] + colors.secondary[1]) / 2),
+		Math.round((colors.primary[2] + colors.secondary[2]) / 2),
+	];
+
+    const alpha = isDark ? 0.9 : 0.85;
+
+	return {
+		primary: rgbToRgba(colors.primary, alpha),
+		secondary: rgbToRgba(colors.secondary, alpha),
+		tertiary: rgbToRgba(tertiary, alpha),
 	};
 }
